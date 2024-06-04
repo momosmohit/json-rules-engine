@@ -1,6 +1,7 @@
 'use strict'
 
 import Operator from './operator'
+import fuzz from 'fuzzball'
 
 const Operators = []
 Operators.push(new Operator('equal', (a, b) => a === b))
@@ -18,5 +19,21 @@ Operators.push(new Operator('lessThan', (a, b) => a < b, numberValidator))
 Operators.push(new Operator('lessThanInclusive', (a, b) => a <= b, numberValidator))
 Operators.push(new Operator('greaterThan', (a, b) => a > b, numberValidator))
 Operators.push(new Operator('greaterThanInclusive', (a, b) => a >= b, numberValidator))
+Operators.push(new Operator('similarTo', (arr, b, score) => {
+  console.log("a: ",arr)
+  console.log("b: ",b)
+
+  let mostSimiliarElement = null
+  if (!arr) {
+    return mostSimiliarElement
+  }
+  for (let index = 0; index < arr.length; index++) {
+    const element = arr[index]
+    if (fuzz(element, b) > (!score ? 65 : score)) {
+      mostSimiliarElement = element
+    }
+  }
+  return mostSimiliarElement
+}, numberValidator))
 
 export default Operators
